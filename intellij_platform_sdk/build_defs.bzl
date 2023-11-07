@@ -110,25 +110,25 @@ DIRECT_IJ_PRODUCTS = {
         ide = "intellij-ue",
         directory = "intellij_ue_2022_3",
     ),
-    "android-studio-2022.2": struct(
-        ide = "android-studio",
-        directory = "android_studio_2022_2",
-    ),
     "android-studio-2022.3": struct(
         ide = "android-studio",
-        directory = "android_studio_2022_3",
+        archive = "android_studio_with_blaze_2022_3",
+        oss_workspace = "android_studio_2022_3",
     ),
     "android-studio-2023.1": struct(
         ide = "android-studio",
-        directory = "android_studio_2023_1",
+        archive = "android_studio_with_blaze_2023_1",
+        oss_workspace = "android_studio_2023_1",
     ),
     "android-studio-2023.2": struct(
         ide = "android-studio",
         archive = "android_studio_with_blaze_2023_2",
+        oss_workspace = "android_studio_2023_2",
     ),
     "android-studio-dev": struct(
         ide = "android-studio",
-        directory = "android_studio_dev",
+        archive = "android_studio_with_blaze_dev",
+        oss_workspace = "android_studio_dev",
     ),
     "clion-2021.3": struct(
         ide = "clion",
@@ -271,9 +271,11 @@ def select_for_ide(intellij = None, intellij_ue = None, android_studio = None, c
     return select_for_plugin_api(params)
 
 def _plugin_api_directory(value):
-    if hasattr(value, "archive"):
-        return "//third_party/corp_installers/jetbrains/android_studio_with_blaze/" + value.archive + "/linux_archive"
-    return "@" + value.directory + "//"
+    if hasattr(value, "oss_workspace"):
+        directory = value.oss_workspace
+    else:
+        directory = value.directory
+    return "@" + directory + "//"
 
 def select_from_plugin_api_directory(intellij, android_studio, clion, intellij_ue = None):
     """Internal convenience method to generate select statement from the IDE's plugin_api directories.
